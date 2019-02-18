@@ -1,0 +1,20 @@
+@import './global';
+
+.navigation {
+    ul {
+        padding: 1em;
+        li {
+            list-style: none;
+            display: inline;
+            padding: 1em;
+            margin: .6em;
+            a {
+                color: lighten($primary, $amount: 30);
+            }
+        }
+    }
+
+    .active {
+        color: $primary;
+    }
+}

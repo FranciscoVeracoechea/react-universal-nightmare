@@ -1,0 +1,68 @@
+{
+    "parser": "babel-eslint",
+    "extends": [
+        "eslint:recommended",
+        "airbnb"
+    ],
+    "plugins": [
+        "import",
+        "react",
+        "babel"
+    ],
+    "env": {
+        "es6": true,
+        "jest": true,
+        "browser": true
+    },
+    "rules": {
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "camelcase": "off",
+        "import/newline-after-import": [
+            "error",
+            {
+                "count": 2
+            }
+        ],
+        "consistent-return": "off",
+        "max-len": "off",
+        "import/no-absolute-path": 0,
+        "import/extensions": 0,
+        "no-mixed-operators": 0,
+        "import/no-unresolved": "off",
+        "react/sort-comp": [
+            "error",
+            {
+                "order": [
+                    "type-annotations",
+                    "static-methods",
+                    "lifecycle",
+                    "everything-else",
+                    "render"
+                ]
+            }
+        ],
+        "react/jsx-filename-extension": [
+            "error",
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx"
+                ]
+            }
+        ],
+        "react/forbid-prop-types": "off",
+        "no-restricted-properties": [
+            "error",
+            {
+                "property": "lenght"
+            }
+        ],
+        "react/prop-types": [
+            "off"
+        ],
+        "import/no-extraneous-dependencies": "off"
+    }
+}
