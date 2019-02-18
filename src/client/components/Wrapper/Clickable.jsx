@@ -5,7 +5,7 @@ const handler = () => {
   document.title = 'Nightmare';
 };
 
-const Wrapper = ({ children }) => (
+const Clickable = ({ children }) => (
   <div role="article">
     <div
       onClick={handler}
@@ -17,4 +17,4 @@ const Wrapper = ({ children }) => (
   </div>
 );
 
-export default Wrapper;
+export default Clickable;

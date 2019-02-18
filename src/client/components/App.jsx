@@ -7,7 +7,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 // Components
-import Wrapper from './Wrapper';
+import Clickable from './Wrapper/Clickable';
 import Nav from './Nav/Nav';
 // assets
 import reactLogo from '../assets/img/react.svg';
@@ -18,13 +18,13 @@ library.add(fas, far, fab);
 
 const App = ({ children }) => (
   <div>
-    <Wrapper>
+    <Clickable>
       <header className={styles.header}>
         <img src={reactLogo} alt="react logo" className={styles.logo} />
-        <h1 className={styles.title}>Universal React Nightmare</h1>
+        <h1 className={styles.title}>React Universal Nightmare</h1>
         <Nav />
       </header>
-    </Wrapper>
+    </Clickable>
     <main>
       { children }
     </main>
