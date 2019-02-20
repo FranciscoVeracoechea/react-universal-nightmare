@@ -1,5 +1,6 @@
 // Dependencies
 import React from 'react';
+import { hot } from 'react-hot-loader';
 import {
   BrowserRouter, StaticRouter, Switch, Route,
 } from 'react-router-dom';
@@ -32,4 +33,4 @@ const Root = ({ server, location, context }) => {
   );
 };
 
-export default Root;
+export default hot(module)(Root);

@@ -5,9 +5,9 @@
         "airbnb"
     ],
     "plugins": [
+        "babel",
         "import",
-        "react",
-        "babel"
+        "react"
     ],
     "env": {
         "es6": true,
@@ -15,6 +15,7 @@
         "browser": true
     },
     "rules": {
+        "babel/valid-typeof": 1,
         "comma-dangle": [
             "error",
             "always-multiline"

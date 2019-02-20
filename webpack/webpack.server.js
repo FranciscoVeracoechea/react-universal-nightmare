@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
@@ -5,13 +6,14 @@ const commonConfig = require('./webpack.common');
 const getPlugins = require('./getPlugins');
 
 
+const isDev = process.env.NODE_ENV === 'development';
 const type = 'server';
 
-module.exports = isDev => ({
+module.exports = {
   ...commonConfig(isDev, type),
   entry: path.resolve(__dirname, '../src/server/middlewares/render.js'),
   externals: nodeExternals({
-    whitelist: [/^redux\/(store|modules)/],
+    whitelist: [/^redux\/(store|modules)/, /^react-helmet/, /^window-or-global/],
   }),
   name: type,
   target: 'node',
@@ -22,4 +24,4 @@ module.exports = isDev => ({
     chunkFilename: '[name].bundle.js',
   },
   plugins: getPlugins(isDev),
-});
+};

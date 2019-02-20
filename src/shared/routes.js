@@ -1,7 +1,7 @@
 // Components
-import Blog from '../client/components/Blog';
-import About from '../client/components/About';
-import Home from '../client/components/Home';
+import Blog from '../client/components/BlogPage/Blog';
+import About from '../client/components/AboutPage/About';
+import Home from '../client/components/HomePage/Home';
 
 
 export default [

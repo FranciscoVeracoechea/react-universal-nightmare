@@ -1,12 +1,14 @@
+require('dotenv').config();
 const path = require('path');
 
 const commonConfig = require('./webpack.common');
 const getPlugins = require('./getPlugins');
 
 
+const isDev = process.env.NODE_ENV === 'development';
 const type = 'client';
 
-module.exports = isDev => ({
+module.exports = {
   ...commonConfig(isDev, type),
   entry: {
     main: [
@@ -27,4 +29,4 @@ module.exports = isDev => ({
     chunkFilename: '[name].bundle.js',
   },
   plugins: getPlugins(isDev),
-});
+};
