@@ -47,10 +47,17 @@ module.exports = (isDev, type) => ({
         options: {
           name: '[name].[hash:10].[ext]',
           ...(isDev ? {} : {
-            path: path.resolve(__dirname, '..', 'public/media'),
-            outputPath: '/media',
-            publicPath: '/media/',
+            path: path.resolve(__dirname, '..', 'public/images'),
+            outputPath: '/images',
+            publicPath: '/images/',
           }),
+        },
+      },
+      {
+        test: /\.(ico)$/,
+        loader: 'file-loader',
+        options: {
+          name: 'favicon.[ext]',
         },
       },
     ],

@@ -20,6 +20,7 @@ export default ({
   ${helmet.title.toString()}
   ${helmet.meta.toString()}
   ${helmet.link.toString()}
+  <link rel="icon" href="favicon.ico?hash=${hash}">
   <style>${minifyCss(dom.css())}</style>
   <link rel="stylesheet" href="styles.${hash}.css"/>
 </head>
