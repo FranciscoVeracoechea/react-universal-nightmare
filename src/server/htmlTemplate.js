@@ -10,7 +10,7 @@ export default ({
   hash,
   browserEnv = {},
   markup,
-  initialState,
+  state,
 }) => `<!DOCTYPE html>
 <html ${helmet.htmlAttributes.toString()}>
 <head>
@@ -26,7 +26,7 @@ export default ({
 <body ${helmet.bodyAttributes.toString()}>
   <div id="root">${markup}</div>
   <script>
-    window.initialState = ${JSON.stringify(initialState)};
+    window.__STATE__ = ${JSON.stringify(state)};
     window.browserEnv = ${JSON.stringify(browserEnv)};
   </script>
   <script src="bundle.${hash}.js"></script>

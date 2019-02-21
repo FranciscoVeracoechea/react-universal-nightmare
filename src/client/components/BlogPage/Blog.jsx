@@ -1,6 +1,7 @@
 // Dependencies
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // assets
 import { container } from '../../assets/sass/App.scss';
@@ -23,7 +24,8 @@ class Blog extends Component {
   }
 
   handleOnClick = () => {
-    const { fetchPost } = this.props;
+    const { go, fetchPost } = this.props;
+    go('/yes!');
     fetchPost('Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint! ');
   }
 
@@ -47,4 +49,6 @@ class Blog extends Component {
 
 export default connect(({ blog }) => ({
   posts: blog.posts,
-}), actions)(Blog);
+}), {
+  ...actions, go: (url) => push(url)
+})(Blog);

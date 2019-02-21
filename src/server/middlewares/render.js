@@ -1,7 +1,7 @@
 // Dependencies
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { matchPath } from 'react-router-dom';
+import { matchPath, StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { from as observableFrom, forkJoin } from 'rxjs';
 import {
@@ -16,11 +16,11 @@ import routes from '../../shared/routes';
 
 
 export default ({
-    browserEnv,
-    // serverStats,
-    clientStats: { hash },
+  browserEnv,
+  // serverStats,
+  clientStats: { hash },
 }) => (req, res) => {
-  const store = configureStore();
+  const { store } = configureStore({ location: req.url, server: true });
   const context = {};
 
   observableFrom(routes).pipe(
@@ -34,20 +34,18 @@ export default ({
   ).subscribe(() => {
     const markup = renderToString(
       <Provider store={store}>
-        <Root
-          server
-          location={req.url}
-          context={context}
-        />
+        <StaticRouter location={req.url} context={context}>
+          <Root />
+        </StaticRouter>
       </Provider>
     );
     if (context.url) {
-      res.redirect(301, context.url);
+      res.redirect(302, context.url);
     } else {
       res.writeHead(200, { 'Content-Type': 'text/html' });
       res.end(
         htmlTemplate({
-          initialState: store.getState(),
+          state: store.getState(),
           markup,
           browserEnv,
           hash,
