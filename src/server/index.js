@@ -19,22 +19,18 @@ app.set('browserEnv', {
 });
 global.browserEnv = app.get('browserEnv');
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, '../../public')));
 if (isDev) {
   webpackDevServer(app);
 } else {
-  // const CLIENT_ASSETS_DIR = path.join(__dirname, '../public/client');
-  // const CLIENT_STATS_PATH = path.join(CLIENT_ASSETS_DIR, 'stats.json');
-  const SERVER_RENDERER_PATH = path.join(__dirname, '../../dist/server.js');
-  const serverRenderer = require(SERVER_RENDERER_PATH).default;
-  // const stats = require(CLIENT_STATS_PATH);
-  app.use(serverRenderer({ browserEnv: app.get('browserEnv') }));
+  const { default: serverRenderer } = require(path.join(__dirname, '../../dist/server.js'));
+  const clientStats = require(path.join(__dirname, '../../compilationStats.json'));
+  app.use(serverRenderer({ browserEnv: app.get('browserEnv'), clientStats }));
 }
-
-app.use(express.static('public'));
 
 app.listen(app.get('port'), (err) => {
   if (!err) {
+    console.log(path.join(__dirname, '../../public'));
     console.log(`Server listen on ${process.env.APP_URL}`);
     if (isDev) {
       import('open')

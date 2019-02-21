@@ -1,9 +1,22 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 
 module.exports = (isDev, type) => ({
   mode: isDev ? 'development' : 'production',
+  cache: !isDev,
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true,
+      }),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
+  },
   module: {
     rules: [
       {
@@ -33,8 +46,11 @@ module.exports = (isDev, type) => ({
         loader: 'file-loader',
         options: {
           name: '[name].[hash:10].[ext]',
-          path: path.resolve(__dirname, '..', 'public'),
-          publicPath: '/public',
+          ...(isDev ? {} : {
+            path: path.resolve(__dirname, '..', 'public/media'),
+            outputPath: '/media',
+            publicPath: '/media/',
+          }),
         },
       },
     ],

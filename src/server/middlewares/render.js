@@ -5,7 +5,7 @@ import { matchPath } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { from as observableFrom, forkJoin } from 'rxjs';
 import {
-  filter, mergeMap, map, scan, tap, takeWhile, defaultIfEmpty,
+  filter, mergeMap, scan, defaultIfEmpty,
 } from 'rxjs/operators';
 // Store
 import configureStore from '../../shared/configureStore';
@@ -15,27 +15,23 @@ import htmlTemplate from '../htmlTemplate';
 import routes from '../../shared/routes';
 
 
-const getObserver = value => value instanceof Promise ? observableFrom(value) : value;
-
 export default ({
-  // clientStats, serverStats,
-  browserEnv,
+    browserEnv,
+    // serverStats,
+    clientStats: { hash },
 }) => (req, res) => {
   const store = configureStore();
   const context = {};
 
-  console.log(req.url)
-  console.time('ROUTES')
   observableFrom(routes).pipe(
     filter(route => matchPath(req.url, route) && route.component && route.component.initialAction),
     scan((acc, { component }) => [
       ...acc,
-      getObserver(store.dispatch(component.initialAction())),
+      store.dispatch(component.initialAction()),
     ], []),
-    mergeMap(values => forkJoin(...values)),
-    defaultIfEmpty('Observable.of() Empty!')
+    defaultIfEmpty([Promise.resolve()]),
+    mergeMap(values => forkJoin(...values))
   ).subscribe(() => {
-    console.timeEnd('ROUTES')
     const markup = renderToString(
       <Provider store={store}>
         <Root
@@ -54,6 +50,7 @@ export default ({
           initialState: store.getState(),
           markup,
           browserEnv,
+          hash,
         })
       );
     }

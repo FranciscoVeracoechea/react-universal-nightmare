@@ -11,7 +11,8 @@ const type = 'server';
 
 module.exports = {
   ...commonConfig(isDev, type),
-  entry: path.resolve(__dirname, '../src/server/middlewares/render.js'),
+  context: path.resolve(__dirname, '../src/server'),
+  entry: './middlewares/render.js',
   externals: nodeExternals({
     whitelist: [/^redux\/(store|modules)/, /^react-helmet/, /^window-or-global/],
   }),

@@ -10,6 +10,7 @@ const type = 'client';
 
 module.exports = {
   ...commonConfig(isDev, type),
+  context: path.resolve(__dirname, '../src/client'),
   entry: {
     main: [
       ...(
@@ -17,16 +18,16 @@ module.exports = {
           ? ['webpack-hot-middleware/client', 'react-hot-loader/patch']
           : []
       ),
-      path.resolve(__dirname, '../src/client'),
+      './index.js',
     ],
   },
   name: type,
   target: 'web',
   output: {
-    filename: '[name].bundle.js',
+    filename: 'bundle.[hash].js',
     path: path.resolve(__dirname, '../public'),
-    publicPath: '/public',
-    chunkFilename: '[name].bundle.js',
+    publicPath: '/',
+    chunkFilename: '[id].[chunkhash].bundle.js',
   },
   plugins: getPlugins(isDev),
 };

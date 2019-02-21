@@ -1,13 +1,13 @@
 import { dom } from '@fortawesome/fontawesome-svg-core';
-import { default as minifyCssString } from 'minify-css-string';
 import { Helmet } from 'react-helmet';
 
+
+const minifyCss = css => css.replace(/\n/g, '').replace(/\s\s+/g, '').replace(/\s+/g, '');
 
 const helmet = Helmet.renderStatic();
 
 export default ({
-  app = 'main',
-  stylesheet = '/public/style.css',
+  hash,
   browserEnv = {},
   markup,
   initialState,
@@ -20,8 +20,8 @@ export default ({
   ${helmet.title.toString()}
   ${helmet.meta.toString()}
   ${helmet.link.toString()}
-  <style>${minifyCssString(dom.css())}</style>
-  <link rel="stylesheet" href="${stylesheet}"/>
+  <style>${minifyCss(dom.css())}</style>
+  <link rel="stylesheet" href="styles.${hash}.css"/>
 </head>
 <body ${helmet.bodyAttributes.toString()}>
   <div id="root">${markup}</div>
@@ -29,6 +29,6 @@ export default ({
     window.initialState = ${JSON.stringify(initialState)};
     window.browserEnv = ${JSON.stringify(browserEnv)};
   </script>
-  <script src="/public/${app}.bundle.js"></script>
+  <script src="bundle.${hash}.js"></script>
 </body>
 </html>`;
