@@ -1,19 +1,36 @@
+// @flow
 // Dependencies
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
+import { goBack } from 'connected-react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { map, tap } from 'rxjs/operators';
+import { autobind } from 'core-decorators';
 // assets
 import { container } from '../../assets/sass/App.scss';
 // actions
 import * as actions from '../../../shared/actions/blogActions';
 // Components
 import Page from '../Wrappers/Page';
+// Request
+import request from '../../../shared/utils/Request.js';
 
 
-class Blog extends Component {
-  static initialAction() {
-    return actions.fetchPost('dispatched from the SERVER!...');
+type Props = {
+  fetchPost(text: string): void,
+  goback(): void,
+  posts: string,
+};
+
+class Blog extends Component<Props> {
+  static initialAction(dispatch) {
+    return request({
+      useBaseUrl: false,
+      url: 'https://api.github.com/users/FranciscoVeracoechea',
+    }).pipe(
+      map(result => result.response),
+      tap(res => dispatch(actions.fetchUser(res.bio)))
+    );
   }
 
   componentDidMount() {
@@ -23,10 +40,16 @@ class Blog extends Component {
     }
   }
 
-  handleOnClick = () => {
-    const { go, fetchPost } = this.props;
-    go('/yes!');
+  @autobind
+  handleOnClick() {
+    const { fetchPost } = this.props;
     fetchPost('Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint! ');
+  }
+
+  @autobind
+  goTo() {
+    const { goback } = this.props;
+    goback();
   }
 
   render() {
@@ -40,6 +63,8 @@ class Blog extends Component {
             Blog
           </h2>
           <button onClick={this.handleOnClick} type="button">Get Data</button>
+          &nbsp;
+          <button onClick={this.goTo} type="button">Go Back</button>
           <p>{ posts }</p>
         </div>
       </Page>
@@ -50,5 +75,5 @@ class Blog extends Component {
 export default connect(({ blog }) => ({
   posts: blog.posts,
 }), {
-  ...actions, go: (url) => push(url)
+  ...actions, goback: url => goBack(url),
 })(Blog);

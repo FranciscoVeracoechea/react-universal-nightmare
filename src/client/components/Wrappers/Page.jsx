@@ -1,9 +1,11 @@
+// @flow
 // dependencies
-import React, { Component } from 'react';
+import React, { Component, type Element } from 'react';
 import { withRouter } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import root from 'window-or-global';
-// assets
+import type { Location } from 'react-router-dom';
+// asset
 import logo from '../../assets/img/react.svg';
 
 
@@ -15,7 +17,41 @@ const {
   facebookId = '',
 } = root.browserEnv;
 
-class Page extends Component {
+type Props = {
+  children: Element<any>,
+  location: Location,
+  id?: string,
+  className?: string,
+  title?: string,
+  description?: string,
+  image?: string,
+  contentType?: string,
+  twitter?: string,
+  noCrawl?: string,
+  published?: string,
+  updated?: string,
+  category?: string,
+  schema?: string,
+  tags?: Array<string>,
+};
+
+class Page extends Component<Props> {
+  static defaultProps = {
+    id: '',
+    schema: '',
+    className: '',
+    title: '',
+    description: '',
+    image: '',
+    contentType: '',
+    twitter: '',
+    noCrawl: '',
+    published: '',
+    updated: '',
+    category: '',
+    tags: [],
+  };
+
   defaultSep = ' | ';
 
   getMetaTags({

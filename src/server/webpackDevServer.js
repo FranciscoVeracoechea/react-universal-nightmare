@@ -24,7 +24,7 @@ export default (app) => {
     app.use(webpackDevMiddleware(compiler, {
       serverSideRender: true,
     }));
-    app.use(webpackHotMiddleware(compiler.compilers.find(comp => comp.name === 'client')));
+    app.use(webpackHotMiddleware(compiler.compilers.find(c => c.name === 'client')));
     app.use(webpackHotServerMiddleware(compiler, {
       serverRendererOptions: {
         browserEnv: app.get('browserEnv'),

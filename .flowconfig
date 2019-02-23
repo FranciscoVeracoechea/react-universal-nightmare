@@ -1,0 +1,22 @@
+[ignore]
+.*/.yarn-cache/.*
+.*/node_modules/fbjs/.*
+.*/node_modules/immutable/.*
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+esproposal.decorators=ignore
+esproposal.optional_chaining=enable
+esproposal.nullish_coalescing=enable
+module.name_mapper='.+\(.s?css\)' -> 'CSSModule'
+module.file_ext=.js
+module.file_ext=.json
+module.file_ext=.jsx
+module.file_ext=.css
+module.file_ext=.scss

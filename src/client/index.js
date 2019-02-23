@@ -9,8 +9,11 @@ import RootComponent from '../shared/RootComponent';
 import configureStore from '../shared/configureStore';
 import './assets/img/favicon.ico';
 
+
 // Create a store and get back itself and its history object
+/* eslint-disable */
 const { store, history } = configureStore({ state: window.__STATE__ });
+/* eslint-enable */
 
 // Running locally, we should run on a <ConnectedRouter /> rather than on a <StaticRouter /> like on the server
 const App = (

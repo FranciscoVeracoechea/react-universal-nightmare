@@ -1,36 +1,53 @@
+// @flow
 // Dependencies
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { matchPath, StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { from as observableFrom, forkJoin } from 'rxjs';
+import { from, forkJoin, isObservable } from 'rxjs';
+import isPromise from 'is-promise';
 import {
-  filter, mergeMap, scan, defaultIfEmpty,
+  filter, mergeMap, defaultIfEmpty, map, toArray,
 } from 'rxjs/operators';
+// Flow Types
+import type { $Request, $Response, Middleware } from 'express';
 // Store
 import configureStore from '../../shared/configureStore';
 import Root from '../../shared/RootComponent';
 import htmlTemplate from '../htmlTemplate';
 // Routes
-import routes from '../../shared/routes';
+import routes, { type Route } from '../../shared/routes';
 
 
-export default ({
-  browserEnv,
-  // serverStats,
-  clientStats: { hash },
-}) => (req, res) => {
+type ServerRender = {
+  browserEnv: {},
+  clientStats: {
+    hash: string,
+  },
+};
+
+const wrap = obj => (isPromise(obj) ? obj : Promise.resolve(obj));
+const getAction = store => (route: Route) => {
+  const action = route.component.initialAction(store.dispatch);
+  return isObservable(action)
+    ? action
+    : wrap(action && store.dispatch(action));
+};
+
+export default (stats: ServerRender): Middleware => (req: $Request, res: $Response) => {
+  const {
+    browserEnv,
+    clientStats: { hash },
+  } = stats;
   const { store } = configureStore({ location: req.url, server: true });
   const context = {};
 
-  observableFrom(routes).pipe(
-    filter(route => matchPath(req.url, route) && route.component && route.component.initialAction),
-    scan((acc, { component }) => [
-      ...acc,
-      store.dispatch(component.initialAction()),
-    ], []),
-    defaultIfEmpty([Promise.resolve()]),
-    mergeMap(values => forkJoin(...values))
+  from(routes).pipe(
+    filter(route => Boolean(matchPath(req.url, route) && route.component?.initialAction)),
+    map((route: Route) => getAction(store)(route)),
+    toArray(),
+    mergeMap(values => forkJoin(...values)),
+    defaultIfEmpty(),
   ).subscribe(() => {
     const markup = renderToString(
       <Provider store={store}>
