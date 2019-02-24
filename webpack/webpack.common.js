@@ -1,4 +1,5 @@
 const path = require('path');
+const sass = require('sass');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -34,11 +35,19 @@ module.exports = (isDev, type) => ({
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          (!isDev || type === 'server')
-            ? MiniCssExtractPlugin.loader
-            : 'style-loader',
-          'css-loader?modules=true&localIdentName=[name]__[local]',
-          'sass-loader',
+          (!isDev || type === 'server') ? MiniCssExtractPlugin.loader : 'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[name]__[local]',
+            },
+          }, {
+            loader: 'sass-loader',
+            options: {
+              implementation: sass,
+            },
+          },
         ],
       },
       {
@@ -75,5 +84,5 @@ module.exports = (isDev, type) => ({
       path.resolve(__dirname, '../src/server'),
     ],
   },
-  devtool: 'eval-source-map',
+  devtool: isDev ? 'eval-source-map' : 'none',
 });
