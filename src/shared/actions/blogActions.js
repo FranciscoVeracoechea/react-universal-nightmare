@@ -3,24 +3,26 @@ export const actionTypes = {
   success: 'BLOG_FETCH_POST_SUCCESS',
   error: 'BLOG_FETCH_POST_ERROR',
   fetchUser: 'FETCH_USER',
+  cancel: 'BLOG_CANCEL_FETCH',
+  fetchSinglePost: 'FETCH_SINGLE_POST_START',
+  singlePost: 'FETCH_SINGLE_POST_SUCEESS',
 };
 
-export const fetchUser = payload => ({
-  type: actionTypes.success,
-  payload,
+
+export const fetchSinglePost = id => ({
+  type: actionTypes.postStart,
+  payload: { id },
 });
 
-export const fetchPost = text => (dispatch) => {
-  dispatch({
-    type: actionTypes.start,
-  });
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      dispatch({
-        type: actionTypes.success,
-        payload: text,
-      });
-      resolve(text);
-    }, 2000);
-  });
-};
+export const setPosts = blogs => ({
+  type: actionTypes.success,
+  payload: blogs,
+});
+
+export const fetchPosts = () => ({
+  type: actionTypes.start,
+});
+
+export const cancelFetch = () => ({
+  type: actionTypes.cancel,
+});

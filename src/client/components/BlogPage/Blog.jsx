@@ -1,55 +1,64 @@
 // @flow
 // Dependencies
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { goBack } from 'connected-react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { map, tap } from 'rxjs/operators';
+import { map, endWith, tap } from 'rxjs/operators';
 import { autobind } from 'core-decorators';
+// flow types
+import type { Dispatch } from 'redux';
 // assets
-import { container } from '../../assets/sass/App.scss';
+import { container, sectionHeader } from '../../assets/sass/App.scss';
 // actions
-import * as actions from '../../../shared/actions/blogActions';
+import { setPosts } from '../../../shared/actions/blogActions';
 // Components
 import Page from '../Wrappers/Page';
 // Request
 import request from '../../../shared/utils/Request.js';
+// assets
+import styles from '../../assets/sass/Blog.scss';
 
+
+type Action = {
+  type: string,
+  payload: {},
+};
+
+type Post = {
+  id: number,
+  title: string,
+  body: string,
+};
 
 type Props = {
-  fetchPost(text: string): void,
-  goback(): void,
-  posts: string,
+  fetchPosts(): void,
+  goBack(): void,
+  posts: Array<Post>,
 };
 
 class Blog extends Component<Props> {
-  static initialAction(dispatch) {
-    return request({
-      useBaseUrl: false,
-      url: 'https://api.github.com/users/FranciscoVeracoechea',
-    }).pipe(
-      map(result => result.response),
-      tap(res => dispatch(actions.fetchUser(res.bio)))
+  static initialAction(dispatch: Dispatch<Action>) {
+    const ajax = {
+      useBaseUrl: true,
+      url: '/api/blog',
+    };
+    return request(ajax).pipe(
+      map(({ response }) => response),
+      tap(res => dispatch(setPosts(res.data))),
+      endWith(null)
     );
   }
 
   componentDidMount() {
-    const { fetchPost, posts } = this.props;
+    const { fetchPosts, posts } = this.props;
     if (!posts) {
-      fetchPost('dispatched from the CLIENT!...');
+      fetchPosts();
     }
   }
 
   @autobind
-  handleOnClick() {
-    const { fetchPost } = this.props;
-    fetchPost('Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, sint! ');
-  }
-
-  @autobind
   goTo() {
-    const { goback } = this.props;
-    goback();
+    const { goBack } = this.props;
+    goBack();
   }
 
   render() {
@@ -57,23 +66,40 @@ class Blog extends Component<Props> {
     return (
       <Page title="Blog">
         <div className={container}>
-          <h2>
-            <FontAwesomeIcon icon="blog" />
-            &nbsp;
-            Blog
-          </h2>
-          <button onClick={this.handleOnClick} type="button">Get Data</button>
-          &nbsp;
-          <button onClick={this.goTo} type="button">Go Back</button>
-          <p>{ posts }</p>
+          <section className={sectionHeader}>
+            <button onClick={this.goTo} type="button" title="go back">
+              <FontAwesomeIcon icon="chevron-left" />
+            </button>
+            <h2>
+              <FontAwesomeIcon icon="blog" />
+              {' Blog'}
+            </h2>
+          </section>
+          <section>
+            {
+              posts
+                ? posts.map(({
+                  id, title, body,
+                }) => (
+                  <article className={styles.article} key={id}>
+                    <h4>
+                      {`${id} - `}
+                      {title}
+                    </h4>
+                    <p>{body}</p>
+                  </article>
+                ))
+                : (
+                  <article className={styles.article}>
+                    <p>Loading...</p>
+                  </article>
+                )
+            }
+          </section>
         </div>
       </Page>
     );
   }
 }
 
-export default connect(({ blog }) => ({
-  posts: blog.posts,
-}), {
-  ...actions, goback: url => goBack(url),
-})(Blog);
+export default Blog;

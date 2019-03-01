@@ -1,9 +1,9 @@
 // Dependencies
 import { combineEpics } from 'redux-observable';
 // epics
-import * as usersEpics from './userEpics';
+import * as blogEpic from './blogEpic';
 
 
 export default combineEpics(
-  ...Object.values(usersEpics),
+  ...Object.values(blogEpic),
 );

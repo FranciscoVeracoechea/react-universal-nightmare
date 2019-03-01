@@ -5,9 +5,10 @@ import type { Dispatch } from 'redux';
 import type {
   Action, ThunkAction,
 } from './configureStore';
+// Containers
+import About from '../client/containers/AboutContainer';
+import Blog from '../client/containers/BlogContainer';
 // Components
-import Blog from '../client/components/BlogPage/Blog';
-import About from '../client/components/AboutPage/About';
 import Home from '../client/components/HomePage/Home';
 
 

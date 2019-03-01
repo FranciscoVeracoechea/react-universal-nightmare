@@ -7,11 +7,10 @@ import type { AjaxRequest, AjaxResponse } from 'rxjs/ajax';
 
 
 type RequestOptions = {
-  useBaseUrl: boolean,
+  useBaseUrl?: boolean,
   url: string,
 };
-
-const baseUrl = root.browserEnv.APP_URL;
+const baseUrl = root.browserEnv.appUrl;
 const globalHeaders = {
   Accept: 'application-json',
 };

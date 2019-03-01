@@ -1,21 +1,25 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { container } from '../../assets/sass/App.scss';
 // Components
 import Page from '../Wrappers/Page';
+// assets
+import { container, homeHeader } from '../../assets/sass/App.scss';
 
 
 const Home = () => (
   <Page>
     <div className={container}>
-      <h2>
-        <FontAwesomeIcon icon="home" />
-        &nbsp;
-        Home
-      </h2>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quia asperiores omnis ea ducimus consequuntur cum molestiae, rem ratione, dolorem temporibus ex laudantium tempora aliquid delectus provident inventore. Soluta, sit.
-      </p>
+      <section className={homeHeader}>
+        <h2>
+          <FontAwesomeIcon icon="home" />
+          {' Home'}
+        </h2>
+      </section>
+      <section>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quia asperiores omnis ea ducimus consequuntur cum molestiae, rem ratione, dolorem temporibus ex laudantium tempora aliquid delectus provident inventore. Soluta, sit.
+        </p>
+      </section>
     </div>
   </Page>
 );

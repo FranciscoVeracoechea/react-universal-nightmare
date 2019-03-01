@@ -4,7 +4,7 @@ import React from 'react';
 import { library, config } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
-import { fab } from '@fortawesome/free-brands-svg-icons';
+// import { fab } from '@fortawesome/free-brands-svg-icons';
 // Components
 import Clickable from './Wrappers/Clickable';
 import Nav from './Nav/Nav';
@@ -14,7 +14,7 @@ import styles from '../assets/sass/App.scss';
 
 
 config.autoAddCss = false;
-library.add(fas, far, fab);
+library.add(fas, far);
 
 const App = ({ children }) => (
   <div>

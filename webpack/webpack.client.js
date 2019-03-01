@@ -29,5 +29,5 @@ module.exports = {
     publicPath: '/',
     chunkFilename: '[id].[chunkhash].bundle.js',
   },
-  plugins: getPlugins(isDev),
+  plugins: getPlugins(isDev, type),
 };

@@ -29,3 +29,24 @@
         }
     }
 }
+
+.homeHeader {
+    padding: 1em;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    button {
+        margin: 1em;
+        background-color: transparent;
+        border: none;
+        color: steelblue;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: all .2s ease;
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+}

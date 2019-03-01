@@ -1,6 +1,6 @@
 // dependencies
 import React from 'react';
-import { render, hydrate } from 'react-dom';
+import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 // Root
@@ -16,21 +16,11 @@ const { store, history } = configureStore({ state: window.__STATE__ });
 /* eslint-enable */
 
 // Running locally, we should run on a <ConnectedRouter /> rather than on a <StaticRouter /> like on the server
-const App = (
+hydrate(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <RootComponent />
     </ConnectedRouter>
-  </Provider>
+  </Provider>,
+  document.querySelector('div#root')
 );
-
-const root = document.querySelector('div#root');
-
-if (root.hasChildNodes()) {
-  // If it's an SSR, we use hydrate to get fast page loads by just
-  // attaching event listeners after the initial render
-  hydrate(App, root);
-} else {
-  // If we're not running on the server, just render like normal
-  render(App, root);
-}
