@@ -19,7 +19,7 @@ import htmlTemplate from '../htmlTemplate';
 import routes, { type Route } from '../../shared/routes';
 
 
-type ServerRender = {
+type ServerRenderStats = {
   browserEnv: {},
   clientStats: {
     hash: string,
@@ -27,6 +27,7 @@ type ServerRender = {
 };
 
 const wrap = obj => (isPromise(obj) ? obj : Promise.resolve(obj));
+
 const getAction = store => (route: Route) => {
   const action = route.component.initialAction(store.dispatch);
   return isObservable(action)
@@ -34,7 +35,7 @@ const getAction = store => (route: Route) => {
     : wrap(action && store.dispatch(action));
 };
 
-export default (stats: ServerRender): Middleware => (req: $Request, res: $Response) => {
+export default (stats: ServerRenderStats): Middleware => (req: $Request, res: $Response) => {
   const {
     browserEnv,
     clientStats: { hash },

@@ -13,23 +13,23 @@ export default ({
   state,
 }) => `<!DOCTYPE html>
 <html ${helmet.htmlAttributes.toString()}>
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-  ${helmet.title.toString()}
-  ${helmet.meta.toString()}
-  ${helmet.link.toString()}
-  <link rel="icon" href="favicon.ico?hash=${hash}">
-  <style>${minifyCss(dom.css())}</style>
-  <link rel="stylesheet" href="styles.${hash}.css"/>
-</head>
-<body ${helmet.bodyAttributes.toString()}>
-  <div id="root">${markup}</div>
-  <script>
-    window.__STATE__ = ${JSON.stringify(state)};
-    window.browserEnv = ${JSON.stringify(browserEnv)};
-  </script>
-  <script src="bundle.${hash}.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    ${helmet.title.toString()}
+    ${helmet.meta.toString()}
+    ${helmet.link.toString()}
+    <link rel="icon" href="favicon.ico?hash=${hash}">
+    <style>${minifyCss(dom.css())}</style>
+    <link rel="stylesheet" href="styles.${hash}.css"/>
+  </head>
+  <body ${helmet.bodyAttributes.toString()}>
+    <div id="root">${markup}</div>
+    <script>
+      window.__STATE__ = ${JSON.stringify(state)};
+      window.browserEnv = ${JSON.stringify(browserEnv)};
+    </script>
+    <script src="bundle.${hash}.js"></script>
+  </body>
 </html>`;

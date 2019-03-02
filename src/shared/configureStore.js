@@ -5,7 +5,6 @@ import { createBrowserHistory, createMemoryHistory } from 'history';
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
-import { createPromise } from 'redux-promise-middleware';
 import { createEpicMiddleware } from 'redux-observable';
 // Epics
 import rootEpic from './epics';
@@ -52,9 +51,6 @@ export default (params: ConfigureStoreParams): ConfigureStoreResponse => {
   const middlewares = [
     thunk,
     routerMiddleware(history),
-    createPromise({
-      promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR'],
-    }),
     epicMiddleware,
     reduxImmutableStateInvariant(),
   ];

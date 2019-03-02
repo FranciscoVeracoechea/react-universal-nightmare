@@ -10,17 +10,29 @@ type RequestOptions = {
   useBaseUrl?: boolean,
   url: string,
 };
+
 const baseUrl = root.browserEnv.appUrl;
+// global headers for all request
 const globalHeaders = {
   Accept: 'application-json',
 };
 
-const XHR = typeof XMLHttpRequest !== 'undefined' ? XMLHttpRequest : xh2;
+const isServer = typeof XMLHttpRequest === 'undefined';
+
+const XHR = !isServer ? XMLHttpRequest : xh2;
+
+const getUrl = (options: RequestOptions): string => {
+  const { useBaseUrl, url } = options;
+  if (typeof useBaseUrl === 'undefined') {
+    return isServer ? `${baseUrl}${url}` : url;
+  }
+  return options.useBaseUrl && options.url ? `${baseUrl}${options.url}` : options.url;
+};
 
 export default (options: AjaxRequest & RequestOptions): Observable<AjaxResponse> => {
   const configs = {
     ...options,
-    url: options.useBaseUrl && options.url ? `${baseUrl}${options.url}` : options.url,
+    url: getUrl(options),
     headers: { ...globalHeaders, ...options.headers },
   };
   return ajax({

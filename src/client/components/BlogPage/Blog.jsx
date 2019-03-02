@@ -37,11 +37,7 @@ type Props = {
 
 class Blog extends Component<Props> {
   static initialAction(dispatch: Dispatch<Action>) {
-    const ajax = {
-      useBaseUrl: true,
-      url: '/api/blog',
-    };
-    return request(ajax).pipe(
+    return request({ url: '/api/blog' }).pipe(
       map(({ response }) => response),
       tap(res => dispatch(setPosts(res.data))),
       endWith(null)

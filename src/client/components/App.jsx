@@ -16,9 +16,13 @@ import styles from '../assets/sass/App.scss';
 config.autoAddCss = false;
 library.add(fas, far);
 
+const handleOnClick = () => {
+  document.title = 'Nightmare';
+};
+
 const App = ({ children }) => (
   <div>
-    <Clickable>
+    <Clickable onClick={handleOnClick}>
       <header className={styles.header}>
         <img src={reactLogo} alt="react logo" className={styles.logo} />
         <h1 className={styles.title}>React Universal Nightmare</h1>

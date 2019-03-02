@@ -1,5 +1,5 @@
 export default class Blog {
-  static get blogs() {
+  static get posts() {
     return [
       {
         userId: 1,

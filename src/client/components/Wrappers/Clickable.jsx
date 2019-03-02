@@ -1,20 +1,25 @@
-import React from 'react';
+// @flow
+import React, { type Element } from 'react';
 
 
-const handler = () => {
-  document.title = 'Nightmare';
+type Props = {
+  children: Element<any>,
+  onClick(Event): void,
 };
 
-const Clickable = ({ children }) => (
-  <div role="article">
-    <div
-      onClick={handler}
-      onKeyPress={handler}
-      role="presentation"
-    >
-      {children}
+const Clickable = (props: Props) => {
+  const { onClick, children } = props;
+  return (
+    <div role="article">
+      <div
+        onClick={onClick}
+        onKeyPress={onClick}
+        role="presentation"
+      >
+        {children}
+      </div>
     </div>
-  </div>
-);
+  );
+}
 
 export default Clickable;

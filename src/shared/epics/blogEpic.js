@@ -10,9 +10,7 @@ import {
 
 export const fetchBlogEpic = action$ => action$.pipe(
   ofType(actionTypes.start),
-  mergeMap(() => request({
-    url: '/api/blog',
-  }).pipe(
+  mergeMap(() => request({ url: '/api/blog' }).pipe(
     delay(1000),
     map(result => result.response),
     map(res => setPosts(res.data))

@@ -2,7 +2,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import {
-  Switch, Route,
+  Switch, Route, Redirect,
 } from 'react-router-dom';
 // Client App
 import App from '../client/components/App';
@@ -14,6 +14,7 @@ const Root = () => (
   <App>
     <Switch>
       { routes.map(props => <Route key={props.path} {...props} />) }
+      <Route render={() => <Redirect to="/" />} />
     </Switch>
   </App>
 );

@@ -1,7 +1,8 @@
+// dependencies
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
-import webpackDevServer from './webpackDevServer';
+// settings
 import gzip from './middlewares/gzip';
 import Routes from './routes';
 
@@ -20,22 +21,27 @@ app.set('browserEnv', {
   defaultDescription: process.env.DEFAULT_DESCRIPTION,
   defaultTwitter: process.env.DEFAULT_TWITTER,
 });
+global.browserEnv = app.get('browserEnv');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../../public')));
 Routes(app);
 
-global.browserEnv = app.get('browserEnv');
 
 if (isDev) {
-  webpackDevServer(app);
+  import('./webpackDevServer').then(({ default: webpackDevServer }) => webpackDevServer(app));
 } else {
   app.get('*.js', gzip());
-  /* eslint-disable */
-  const { default: serverRenderer } = require(path.join(__dirname, '../../dist/server.js'));
-  const clientStats = require(path.join(__dirname, '../../compilationStats.json'));
-  /* eslint-enable */
-  app.use(serverRenderer({ browserEnv: app.get('browserEnv'), clientStats }));
+  const SSR_PATH = path.join(__dirname, '..', '..', 'dist', 'server.js');
+  const STATS_PATH = path.join(__dirname, '..', '..', 'compilationStats.json');
+  Promise.all([import(SSR_PATH), import(STATS_PATH)])
+    .then(([{ default: serverRenderer }, clientStats]) => {
+      app.use(
+        serverRenderer(
+          { browserEnv: app.get('browserEnv'), clientStats }
+        )
+      );
+    });
 }
 
 app.listen(app.get('port'), (err) => {
