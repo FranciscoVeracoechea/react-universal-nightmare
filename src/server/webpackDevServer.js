@@ -9,7 +9,7 @@ const modules = [
   'webpack-dev-middleware',
   'webpack-hot-middleware',
   'webpack-hot-server-middleware',
-  '../../webpack.config.js',
+  '../../webpack/webpack.config.js',
 ];
 
 const dynamicImport = moduleName => import(moduleName);

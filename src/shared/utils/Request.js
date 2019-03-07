@@ -2,8 +2,7 @@
 import root from 'window-or-global';
 import xh2 from 'xhr2';
 import { ajax } from 'rxjs/ajax';
-import type { Observable } from 'rxjs';
-import type { AjaxRequest, AjaxResponse } from 'rxjs/ajax';
+import type { AjaxRequest } from 'rxjs/ajax';
 
 
 type RequestOptions = {
@@ -29,7 +28,7 @@ const getUrl = (options: RequestOptions): string => {
   return options.useBaseUrl && options.url ? `${baseUrl}${options.url}` : options.url;
 };
 
-export default (options: AjaxRequest & RequestOptions): Observable<AjaxResponse> => {
+export default (options: AjaxRequest & RequestOptions) => {
   const configs = {
     ...options,
     url: getUrl(options),

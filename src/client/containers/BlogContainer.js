@@ -3,7 +3,7 @@ import { goBack } from 'connected-react-router';
 // actions
 import * as actions from '../../shared/actions/blogActions';
 // Component
-import Blog from '../components/BlogPage/Blog';
+import Blog from '../pages/Blog';
 
 
 const mapStateToProps = ({ blog }) => ({

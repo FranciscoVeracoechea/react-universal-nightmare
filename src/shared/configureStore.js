@@ -1,5 +1,8 @@
 // @flows
-import { createStore, applyMiddleware, type Store } from 'redux';
+import {
+  createStore, applyMiddleware, type Store, compose,
+} from 'redux';
+import root from 'window-or-global';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 // redux middlewares
 import thunk from 'redux-thunk';
@@ -33,6 +36,9 @@ type ConfigureStoreResponse = {
   history: {},
 };
 
+/* eslint-disable */
+const composeEnhancers = root.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+/* eslint-enable */
 export default (params: ConfigureStoreParams): ConfigureStoreResponse => {
   const {
     location = '',
@@ -59,7 +65,7 @@ export default (params: ConfigureStoreParams): ConfigureStoreResponse => {
     store: createStore(
       rootReducer(history),
       state,
-      applyMiddleware(...middlewares)
+      composeEnhancers(applyMiddleware(...middlewares)),
     ),
     history,
   };

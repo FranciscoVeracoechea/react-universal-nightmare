@@ -12,17 +12,17 @@ const type = 'server';
 module.exports = {
   ...commonConfig(isDev, type),
   context: path.resolve(__dirname, '../src/server'),
-  entry: './middlewares/render.js',
+  entry: './middlewares/serverSideRender.js',
   externals: nodeExternals({
     whitelist: [/^redux\/(store|modules)/, /^react-helmet/, /^window-or-global/],
   }),
   name: type,
   target: 'node',
   output: {
-    filename: 'server.js',
+    filename: 'serverSideRender.js',
     path: path.resolve(__dirname, '../dist/'),
     libraryTarget: 'commonjs2',
     chunkFilename: '[name].bundle.js',
   },
-  plugins: getPlugins(isDev),
+  plugins: getPlugins(isDev, type),
 };

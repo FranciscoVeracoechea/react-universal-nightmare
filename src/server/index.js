@@ -2,9 +2,11 @@
 import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
+import helmet from 'helmet';
 // settings
 import gzip from './middlewares/gzip';
 import Routes from './routes';
+import deviceDetection from './middlewares/deviceDetection';
 
 
 dotenv.config();
@@ -23,16 +25,19 @@ app.set('browserEnv', {
 });
 global.browserEnv = app.get('browserEnv');
 
+app.use(helmet());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../../public')));
+app.use(deviceDetection());
 Routes(app);
 
 
 if (isDev) {
-  import('./webpackDevServer').then(({ default: webpackDevServer }) => webpackDevServer(app));
+  import('./webpackDevServer')
+    .then(({ default: webpackDevServer }) => webpackDevServer(app));
 } else {
-  app.get('*.js', gzip());
-  const SSR_PATH = path.join(__dirname, '..', '..', 'dist', 'server.js');
+  app.get('bundle.\*.js', gzip());
+  const SSR_PATH = path.join(__dirname, '..', '..', 'dist', 'serverSideRender.js');
   const STATS_PATH = path.join(__dirname, '..', '..', 'compilationStats.json');
   Promise.all([import(SSR_PATH), import(STATS_PATH)])
     .then(([{ default: serverRenderer }, clientStats]) => {
