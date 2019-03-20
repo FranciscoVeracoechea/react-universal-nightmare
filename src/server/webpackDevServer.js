@@ -1,3 +1,4 @@
+import path from 'path';
 import { of, forkJoin } from 'rxjs';
 import {
   mergeMap,
@@ -5,6 +6,7 @@ import {
 
 
 const modules = [
+  'open',
   'webpack',
   'webpack-dev-middleware',
   'webpack-hot-middleware',
@@ -14,16 +16,23 @@ const modules = [
 
 const dynamicImport = moduleName => import(moduleName);
 
-export default (app) => {
+export default (app, { isAnalyzer }) => {
   of(modules).pipe(
     mergeMap(m => forkJoin(...m.map(dynamicImport)))
   ).subscribe(([
-    webpack, webpackDevMiddleware, webpackHotMiddleware, webpackHotServerMiddleware, config,
+    open, webpack, webpackDevMiddleware, webpackHotMiddleware, webpackHotServerMiddleware, config,
   ]) => {
     const compiler = webpack(config);
-    app.use(webpackDevMiddleware(compiler, {
+    const devMiddleware = webpackDevMiddleware(compiler, {
       serverSideRender: true,
-    }));
+    });
+    app.use(devMiddleware);
+    devMiddleware.waitUntilValid(() => {
+      if (isAnalyzer) {
+        open(path.join(__dirname, '../../public/report.html'));
+        open(path.join(__dirname, '../../dist/report.html'));
+      }
+    });
     app.use(webpackHotMiddleware(compiler.compilers.find(c => c.name === 'client')));
     app.use(webpackHotServerMiddleware(compiler, {
       serverRendererOptions: {

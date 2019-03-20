@@ -1,8 +1,5 @@
-import { dom } from '@fortawesome/fontawesome-svg-core';
 import { Helmet } from 'react-helmet';
 
-
-const minifyCss = css => css.replace(/\n/g, '').replace(/\s\s+/g, '').replace(/\s+/g, '');
 
 const helmet = Helmet.renderStatic();
 
@@ -21,7 +18,6 @@ export default ({
     ${helmet.meta.toString()}
     ${helmet.link.toString()}
     <link rel="icon" href="favicon.ico?hash=${hash}">
-    <style>${minifyCss(dom.css())}</style>
     <link rel="stylesheet" href="styles.${hash}.css"/>
   </head>
   <body ${helmet.bodyAttributes.toString()}>

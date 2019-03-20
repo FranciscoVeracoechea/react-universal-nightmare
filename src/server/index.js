@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import helmet from 'helmet';
 // settings
 import gzip from './middlewares/gzip';
+import errorHandler from './middlewares/errorHandler';
 import Routes from './routes';
 import deviceDetection from './middlewares/deviceDetection';
 
@@ -34,7 +35,7 @@ Routes(app);
 
 if (isDev) {
   import('./webpackDevServer')
-    .then(({ default: webpackDevServer }) => webpackDevServer(app));
+    .then(({ default: webpackDevServer }) => webpackDevServer(app, { isAnalyzer }));
 } else {
   app.get('bundle.\*.js', gzip());
   const SSR_PATH = path.join(__dirname, '..', '..', 'dist', 'serverSideRender.js');
@@ -48,6 +49,8 @@ if (isDev) {
       );
     });
 }
+
+app.use(errorHandler({ isDev }));
 
 app.listen(app.get('port'), (err) => {
   if (!err && !isAnalyzer) {

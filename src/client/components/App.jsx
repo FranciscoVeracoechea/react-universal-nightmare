@@ -1,7 +1,7 @@
 // dependencies
 import React from 'react';
 // font awesome
-import { library, config } from '@fortawesome/fontawesome-svg-core';
+import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 // import { fab } from '@fortawesome/free-brands-svg-icons';
@@ -13,7 +13,6 @@ import reactLogo from '../assets/img/react.svg';
 import styles from '../assets/sass/App.scss';
 
 
-config.autoAddCss = false;
 library.add(fas, far);
 
 const handleOnClick = () => {
