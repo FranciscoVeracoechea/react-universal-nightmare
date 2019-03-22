@@ -57,9 +57,5 @@ app.listen(app.get('port'), (err) => {
     /* eslint-disable */
     console.log(`Server listening on ${process.env.APP_URL}`);
     /* eslint-enable */
-    if (isDev) {
-      import('open')
-        .then(open => open(`http://localhost:${app.get('port')}/blog`));
-    }
   }
 });

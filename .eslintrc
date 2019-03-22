@@ -2,12 +2,15 @@
     "parser": "babel-eslint",
     "extends": [
         "eslint:recommended",
-        "airbnb"
+        "airbnb",
+        "plugin:flowtype/recommended"
     ],
     "plugins": [
         "babel",
         "import",
-        "react"
+        "react",
+        "flowtype",
+        "react-hooks"
     ],
     "env": {
         "es6": true,
@@ -15,6 +18,10 @@
         "browser": true
     },
     "rules": {
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "flowtype/define-flow-type": 1,
+        "flowtype/use-flow-type": 1,
         "babel/valid-typeof": 1,
         "comma-dangle": [
             "error",

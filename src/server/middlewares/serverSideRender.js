@@ -11,10 +11,9 @@ import isPromise from 'is-promise';
 import {
   filter, mergeMap, defaultIfEmpty, map, toArray,
 } from 'rxjs/operators';
+import type { $Request, $Response } from 'express';
 // actions
 import { setUADevice } from '../../shared/actions/deviceActions';
-// Flow Types
-import type { $Request, $Response, Middleware } from 'express';
 // Store
 import configureStore from '../../shared/configureStore';
 import Root from '../../shared/RootComponent';
@@ -23,9 +22,9 @@ import htmlTemplate from '../htmlTemplate';
 import routes, { type Route, Pageable } from '../../shared/routes';
 
 
-type Request = {
-  ...$Request,
+type Request = $Request & {
   get: (string) => string,
+  session: {},
   isMobile: boolean,
   isBot: boolean,
   url: string,
@@ -44,12 +43,12 @@ type MatchedRoute = {
   match: Match,
 };
 
-const getAction = store => (route: MatchedRoute) => {
+const getAction = ({ dispatch, getState }) => (route: MatchedRoute) => {
   const { component, match } = route;
-  const action = component.initialAction(store.dispatch, store.getState, match);
+  const action = component.initialAction(dispatch, getState, match);
   return isObservable(action) || isPromise(action)
     ? action
-    : of(store.dispatch(action) || null);
+    : of(dispatch(action) || null);
 };
 
 const deviceDispatcher = ({ dispatch }, req: Request) => {
@@ -57,7 +56,7 @@ const deviceDispatcher = ({ dispatch }, req: Request) => {
   dispatch(setUADevice({ isMobile, isBot }));
 };
 
-export default (stats: ServerRenderStats): Middleware => (req: Request, res: $Response) => {
+export default (stats: ServerRenderStats) => (req: Request, res: $Response) => {
   const {
     browserEnv,
     clientStats: { hash },

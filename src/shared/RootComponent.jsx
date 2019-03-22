@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { hot } from 'react-hot-loader';
+import { setConfig, hot } from 'react-hot-loader';
 import {
   Switch, Route, Redirect,
 } from 'react-router-dom';
@@ -18,5 +18,10 @@ const Root = () => (
     </Switch>
   </App>
 );
+
+setConfig({
+  ignoreSFC: true,
+  pureRender: true,
+});
 
 export default hot(module)(Root);

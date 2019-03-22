@@ -15,6 +15,7 @@ const modules = [
 ];
 
 const dynamicImport = moduleName => import(moduleName);
+const execute = process.env.ONCE === 'true';
 
 export default (app, { isAnalyzer }) => {
   of(modules).pipe(
@@ -31,6 +32,9 @@ export default (app, { isAnalyzer }) => {
       if (isAnalyzer) {
         open(path.join(__dirname, '../../public/report.html'));
         open(path.join(__dirname, '../../dist/report.html'));
+      } else if (execute) {
+        process.env.ONCE = 'false';
+        open(`http://localhost:${app.get('port')}`);
       }
     });
     app.use(webpackHotMiddleware(compiler.compilers.find(c => c.name === 'client')));
