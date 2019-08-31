@@ -8,8 +8,8 @@ import type {
   Action, ThunkAction,
 } from './co[nfigureStore';
 // Pages
-import About from '../client/containers/AboutContainer';
-import Blog from '../client/containers/BlogContainer';
+import About from '../client/pages/About';
+import Blog from '../client/pages/Blog';
 import Home from '../client/pages/Home';
 
 

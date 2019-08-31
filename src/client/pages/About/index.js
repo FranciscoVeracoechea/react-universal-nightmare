@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { goBack } from 'connected-react-router';
 // Component
-import About from '../pages/About';
+import About from './About';
 
 
 const mapStateToProps = null;

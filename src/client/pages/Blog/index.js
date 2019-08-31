@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { goBack } from 'connected-react-router';
 // actions
-import * as actions from '../../shared/actions/blogActions';
+import * as actions from '../../../shared/actions/blogActions';
 // Component
-import Blog from '../pages/Blog';
+import Blog from './Blog';
 
 
 const mapStateToProps = ({ blog }) => ({
