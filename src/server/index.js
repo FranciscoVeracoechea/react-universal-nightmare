@@ -3,59 +3,47 @@ import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import helmet from 'helmet';
-// settings
-import gzip from './middlewares/gzip';
-import errorHandler from './middlewares/errorHandler';
-import Routes from './routes';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import favicon from 'serve-favicon';
+// configs
+import appSetter from './configs/appSetter';
+import development from './configs/development';
+import production from './configs/production';
+// middlewares
 import deviceDetection from './middlewares/deviceDetection';
+// API router
+import ApiRouter from './API';
 
 
 dotenv.config();
-const app = express();
 const isAnalyzer = process.env.ANALYZER === 'true';
 const isDev = process.env.NODE_ENV === 'development';
 
-app.set('port', process.env.NODE_PORT || 3333);
-app.set('node_env', process.env.NODE_ENV);
-app.set('browserEnv', {
-  appTitle: process.env.APP_TITLE,
-  appUrl: process.env.APP_URL,
-  facebookId: process.env.FACEBOOK_APP_ID,
-  defaultDescription: process.env.DEFAULT_DESCRIPTION,
-  defaultTwitter: process.env.DEFAULT_TWITTER,
-});
-global.browserEnv = app.get('browserEnv');
+const app = express();
+appSetter(app);
 
+app.use('/', express.static(path.join(__dirname, '..', '..', 'public')));
+app.use('/static', express.static(path.join(__dirname, '..', '..', 'static')));
+app.use(favicon(path.join(__dirname, '..', '..', 'static', 'favicon.ico')));
+app.use(cors());
 app.use(helmet());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, '../../public')));
 app.use(deviceDetection());
-Routes(app);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
+ApiRouter(app);
 
-if (isDev) {
-  import('./webpackDevServer')
-    .then(({ default: webpackDevServer }) => webpackDevServer(app, { isAnalyzer }));
-} else {
-  app.get('bundle.\*.js', gzip());
-  const SSR_PATH = path.join(__dirname, '..', '..', 'dist', 'serverSideRender.js');
-  const STATS_PATH = path.join(__dirname, '..', '..', 'compilationStats.json');
-  Promise.all([import(SSR_PATH), import(STATS_PATH)])
-    .then(([{ default: serverRenderer }, clientStats]) => {
-      app.use(
-        serverRenderer(
-          { browserEnv: app.get('browserEnv'), clientStats }
-        )
-      );
-    });
-}
-
-app.use(errorHandler({ isDev }));
+// development configurations
+development(app, isDev);
+// production configurations
+production(app, isDev);
 
 app.listen(app.get('port'), (err) => {
   if (!err && !isAnalyzer) {
-    /* eslint-disable */
-    console.log(`Server listening on ${process.env.APP_URL}`);
-    /* eslint-enable */
+    console.info(`Server listening on ${process.env.APP_URL}`);
+  } else if (isAnalyzer) {
+    console.info(`Client report on ${app.get('browserEnv').appUrl}/static/clientReport.html`);
+    console.info(`Server report on ${app.get('browserEnv').appUrl}/static/serverReport.html`);
   }
 });

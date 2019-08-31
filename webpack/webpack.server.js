@@ -20,7 +20,7 @@ module.exports = {
   target: 'node',
   output: {
     filename: 'serverSideRender.js',
-    path: path.resolve(__dirname, '../dist/'),
+    path: path.resolve(__dirname, '../dist'),
     libraryTarget: 'commonjs2',
     chunkFilename: '[name].bundle.js',
   },

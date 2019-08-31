@@ -1,5 +1,5 @@
 // dependencies
-import React from 'react';
+import React, { useEffect } from 'react';
 import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
@@ -11,25 +11,34 @@ import {
 import RootComponent from '../shared/RootComponent';
 // Configuroing Store
 import configureStore from '../shared/configureStore';
-import './assets/img/favicon.ico';
 
 
 // Create a store and get back itself and its history object
-/* eslint-disable */
 const { store, history } = configureStore({ state: window.__STATE__ });
-/* eslint-enable */
 
 // Device detection
 setInitialDevice(store.dispatch);
 resolution$.subscribe(store.dispatch);
 
 // Running locally, we should run on a <ConnectedRouter /> rather than on a <StaticRouter /> like on the server
+const Main = () => {
+  useEffect(() => {
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }, []);
+  return (
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <RootComponent />
+      </ConnectedRouter>
+    </Provider>
+  );
+};
+
 hydrate(
-  <Provider store={store}>
-    <ConnectedRouter history={history}>
-      <RootComponent />
-    </ConnectedRouter>
-  </Provider>,
+  <Main />,
   document.querySelector('div#root')
 );
 

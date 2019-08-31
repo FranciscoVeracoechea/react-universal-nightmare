@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { map, endWith, tap } from 'rxjs/operators';
 import { autobind } from 'core-decorators';
-// flow types
-import type { Match } from 'react-router-dom';
-import type { Dispatch } from 'redux';
 // assets
 import { container, sectionHeader } from '../../assets/sass/App.scss';
 // actions
@@ -18,28 +15,9 @@ import request from '../../../shared/utils/Request.js';
 import styles from '../../assets/sass/Blog.scss';
 
 
-type Action = {
-  type: string,
-  payload: {},
-};
-
-type Post = {
-  id: number,
-  title: string,
-  body: string,
-};
-
-type GetState = () => {};
-
-type Props = {
-  fetchPosts(): void,
-  goBack(): void,
-  posts: Array<Post>,
-};
-
-class Blog extends Component<Props> {
-  static initialAction(dispatch: Dispatch<Action>, getState: GetState, match: Match) {
-    console.log(getState(), match);
+class Blog extends Component {
+  static initialAction({ dispatch, getState }, match) {
+    console.info(getState(), match);
     return request({ url: '/api/blog' }).pipe(
       map(ajax => ajax.response),
       tap(res => dispatch(setPosts(res.data))),
