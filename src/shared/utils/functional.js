@@ -22,6 +22,7 @@ export const isFirstRender = items => (items && items.length === 0) || !isDefine
 
 export const executeIfFunction = (f, param = null) => ((f instanceof Function) ? f(param) : f);
 
+export const isString = str => (typeof str === 'string');
 // ------------------------------------------------------
 // FUNCTIONAL STATEMENTS
 // if else
@@ -65,45 +66,6 @@ export const serialezeForm = formElement => [...formElement]
   .map(input => [input.name, input.value])
   .reduce(arrayToObject, {});
 
-// Try Catch
-
-export class Result {
-  constructor(go) {
-    this.go = go;
-  }
-
-  static Ok(v) {
-    return new this((onSuccess, _) => onSuccess(v));
-  }
-
-  static Err(r) {
-    return new this((_, onFailure) => onFailure(r));
-  }
-
-  map(f) {
-    return this.go(v => Result.Ok(f(v)), r => Result.Err(r));
-  }
-
-  chain(f) {
-    return this.go(v => f(v), r => Result.Err(r));
-  }
-
-  unwrap() {
-    return this.go(v => v, (r) => { throw r; });
-  }
-}
-
-export const tryCatch = (attempt) => {
-  if (typeof attempt !== 'function') {
-    throw new Error('tryCatch: the parameters must be of function type');
-  }
-  try {
-    const res = attempt();
-    return Result.Ok(res);
-  } catch (e) {
-    return Result.Err(e);
-  }
-};
 // match media
 export const match = media => window.matchMedia(media).matches;
 
@@ -133,3 +95,44 @@ export const emailValidator = (email) => {
   return validator.test(email);
   /* eslint-enable */
 };
+
+export const newError = error => (params = {}) => {
+  let e;
+  if (error instanceof Error) e = error;
+  else e = new Error(error);
+  const { message, stack } = e;
+  return {
+    ...params, message, stack,
+  };
+};
+
+
+export const deleteCookies = () => {
+  document.cookie.split(';').forEach((cookie) => {
+    const eqPos = cookie.indexOf('=');
+    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  });
+};
+
+export const futurize = Future => fn => (...args) => new Future(
+  (rej, res) => fn(
+    ...args,
+    (err, result) => (err ? rej(err) : res(result))
+  )
+);
+
+export const futurizeP = fn => (...args) => new Promise(
+  (resolve, reject) => fn(
+    ...args,
+    (err, result) => (err ? reject(err) : resolve(result))
+  )
+);
+
+export const getErrors = state => payload => ({
+  ...state,
+  loading: false,
+  errors: payload.errors || payload.message || payload.error.message,
+});
+
+export const classList = (...strArray) => String(strArray.reduce((acc, current) => `${acc} ${current}`, ''));
