@@ -1,14 +1,7 @@
-// @flow
 import root from 'window-or-global';
 import xh2 from 'xhr2';
 import { ajax } from 'rxjs/ajax';
-import type { AjaxRequest } from 'rxjs/ajax';
 
-
-type RequestOptions = {
-  useBaseUrl?: boolean,
-  url: string,
-};
 
 const baseUrl = root.browserEnv.appUrl;
 // global headers for all request
@@ -20,7 +13,7 @@ const isServer = typeof XMLHttpRequest === 'undefined';
 
 const XHR = !isServer ? XMLHttpRequest : xh2;
 
-const getUrl = (options: RequestOptions): string => {
+const getUrl = (options) => {
   const { useBaseUrl, url } = options;
   if (typeof useBaseUrl === 'undefined') {
     return isServer ? `${baseUrl}${url}` : url;
@@ -28,7 +21,7 @@ const getUrl = (options: RequestOptions): string => {
   return options.useBaseUrl && options.url ? `${baseUrl}${options.url}` : options.url;
 };
 
-export default (options: AjaxRequest & RequestOptions) => {
+export default (options) => {
   const configs = {
     ...options,
     url: getUrl(options),

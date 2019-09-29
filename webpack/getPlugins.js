@@ -1,11 +1,10 @@
 // dependencies
-const path = require('path')
+const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const WebpackBar = require('webpackbar');
 
 
 const isAnalyzer = process.env.ANALYZER === 'true';
@@ -37,9 +36,6 @@ module.exports = (isDev, type) => {
     plugins.push(
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
-      new WebpackBar({
-        color: '#4682b4',
-      }),
     );
   } else {
     plugins.push(

@@ -2,6 +2,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { matchPath, StaticRouter } from 'react-router-dom';
+import { ServerStyleSheets } from '@material-ui/styles';
 import { Provider } from 'react-redux';
 import {
   from, isObservable, of, Subject, iif, forkJoin,
@@ -12,7 +13,7 @@ import {
 } from 'rxjs/operators';
 // actions
 import { setUADevice } from '../../shared/actions/deviceActions';
-// import { saveUserFromServer } from '../../shared/actions/authActions';
+import { saveUserFromServer } from '../../shared/actions/authActions';
 // Store
 import configureStore from '../../shared/configureStore';
 import Root from '../../shared/RootComponent';
@@ -56,23 +57,27 @@ dispatch$.pipe(
 
 ssr$.pipe(
   tap(({ store, req }) => dispatch$.next({ store, req, action: setUADevice })),
-  // tap(({ store, req }) => (
-  //   req.session && req.session.isAuthenticated && req.session.user
-  //     ? dispatch$.next({ store, req, action: saveUserFromServer })
-  //     : null
-  // )),
+  tap(({ store, req }) => (
+    req.session && req.session.isAuthenticated && req.session.user
+      ? dispatch$.next({ store, req, action: saveUserFromServer })
+      : null
+  )),
   mergeMap(ssr => routesStream(ssr)),
+  // tap(console.log),
   withLatestFrom(serverData$),
 ).subscribe(([{ req, res, store }, { browserEnv, hash }]) => {
   if (res.headersSent) return;
 
   const context = {};
+  const sheets = new ServerStyleSheets();
   const markup = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.url} context={context}>
-        <Root />
-      </StaticRouter>
-    </Provider>
+    sheets.collect(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <Root />
+        </StaticRouter>
+      </Provider>
+    )
   );
   if (context.url) {
     res.redirect(302, context.url);
@@ -84,6 +89,7 @@ ssr$.pipe(
         markup,
         browserEnv,
         hash,
+        css: sheets.toString(),
       })
     );
   }

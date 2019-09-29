@@ -49,12 +49,7 @@ export default (app) => {
     });
     app.use(devMiddleware);
     // devMiddleware.waitUntilValid(() => {
-    //   if (isAnalyzer) {
-    //     open(`${app.get('browserEnv').appUrl}/static/clientReport.html`);
-    //     open(`${app.get('browserEnv').appUrl}/static/serverReport.html`);
-    //   } else {
-    //     open(`${app.get('browserEnv').appUrl}`);
-    //   }
+    //   console.info('Compiled');
     // });
     app.use(webpackHotMiddleware(compiler.compilers.find(c => c.name === 'client')));
     app.use(webpackHotServerMiddleware(compiler, {

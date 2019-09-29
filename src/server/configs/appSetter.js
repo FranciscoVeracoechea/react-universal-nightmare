@@ -9,6 +9,7 @@ const browserEnv = {
   facebookId: process.env.FACEBOOK_APP_ID,
   defaultDescription: process.env.DEFAULT_DESCRIPTION,
   defaultTwitter: process.env.DEFAULT_TWITTER,
+  env: process.env.NODE_ENV,
 };
 
 const appSetter = (app) => {

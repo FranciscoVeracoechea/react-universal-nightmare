@@ -20,7 +20,7 @@ const handleOnClick = () => {
 };
 
 const App = ({ children }) => (
-  <div>
+  <>
     <Clickable onClick={handleOnClick}>
       <header className={styles.header}>
         <img src={reactLogo} alt="react logo" className={styles.logo} />
@@ -31,7 +31,7 @@ const App = ({ children }) => (
     <main>
       { children }
     </main>
-  </div>
+  </>
 );
 
 export default App;

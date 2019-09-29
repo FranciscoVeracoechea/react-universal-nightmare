@@ -17,6 +17,6 @@ export default (app, isDev) => {
           )
         );
       });
-    app.use(errorHandler());
+    app.use(errorHandler(isDev));
   }
 };

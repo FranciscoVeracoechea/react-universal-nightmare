@@ -32,7 +32,7 @@
                 "proposal": "minimal"
             }
         ],
-        "@babel/plugin-proposal-throw-expressions",
+        "@babel/plugin-proposal-throw-expressions"
     ],
     "env": {
         // "production": {

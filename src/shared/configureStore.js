@@ -1,45 +1,26 @@
-// @flows
 import {
-  createStore, applyMiddleware, type Store, compose,
+  createStore, applyMiddleware, compose,
 } from 'redux';
 import root from 'window-or-global';
 import { createBrowserHistory, createMemoryHistory } from 'history';
 // redux middlewares
-import thunk from 'redux-thunk';
 import { routerMiddleware } from 'connected-react-router';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
 import { createEpicMiddleware } from 'redux-observable';
+// import thunk from 'redux-thunk';
+// import { createPromise } from 'redux-promise-middleware';
 // Epics
 import rootEpic from './epics';
 // Reducers
 import rootReducer from './reducers';
 
-// Flow Types
-export type Action = {
-  type: string,
-  payload?: mixed,
-};
 
-export type ThunkAction = (
-  dispatch: (Action) => mixed,
-  getState: (void) => {}
-) => void | mixed;
+// const composeEnhancers = root.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = root?.browserEnv?.env === 'development'
+  ? root.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  : compose;
 
-type ConfigureStoreParams = {
-  location?: string,
-  state?: {},
-  server: boolean,
-};
-
-type ConfigureStoreResponse = {
-  store: Store<{}>,
-  history: {},
-};
-
-/* eslint-disable */
-const composeEnhancers = root.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-/* eslint-enable */
-export default (params: ConfigureStoreParams): ConfigureStoreResponse => {
+export default (params) => {
   const {
     location = '',
     state = {},
@@ -55,7 +36,10 @@ export default (params: ConfigureStoreParams): ConfigureStoreResponse => {
   const epicMiddleware = createEpicMiddleware();
 
   const middlewares = [
-    thunk,
+    // thunk,
+    // createPromise({
+    //   promiseTypeDelimiter: '/',
+    // }),
     routerMiddleware(history),
     epicMiddleware,
     reduxImmutableStateInvariant(),

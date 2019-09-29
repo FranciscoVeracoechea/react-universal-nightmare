@@ -16,7 +16,7 @@
         "es6": true,
         "jest": true,
         "browser": true,
-        "node": true,
+        "node": true
     },
     "rules": {
         "react-hooks/rules-of-hooks": "error",
@@ -47,6 +47,7 @@
                 ]
             }
         ],
+        "no-param-reassign": ["error", { "props": false }],
         "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
         "consistent-return": "off",
         "max-len": "off",

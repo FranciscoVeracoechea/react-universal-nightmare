@@ -57,7 +57,7 @@ module.exports = (isDev, type) => ({
           ...(type === 'server' ? { emitFile: false } : { emitFile: true }),
           name: '[name].[hash:10].[ext]',
           path: path.resolve(__dirname, '..', 'public', 'media'),
-          outputPath: '/media',
+          outputPath: 'media',
           publicPath: '/media/',
         },
       },

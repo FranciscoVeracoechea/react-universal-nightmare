@@ -60,6 +60,8 @@ export const mapToNumber = object => Object.entries(object).reduce(
 
 export const arrayToObject = (acc, current) => ({ ...acc, [current[0]]: numberParser(current[1]) });
 
+export const objectFromEntries = array => array.reduce(arrayToObject, {});
+
 // map form inputs with name and values to object
 export const serialezeForm = formElement => [...formElement]
   .filter(element => (element.value && element.name))
@@ -77,17 +79,15 @@ export const capitalizer = (string, separator = ' ') => string.split(separator).
 ).join(' ');
 
 //
-export const slugify = (text) => {
-  /* eslint-disable */
-  return text.toString().toLowerCase()
-    .replace(/&/g, '-and-')         // Replace & with 'and'
-    .replace(/\s+/g, '-')           // Replace spaces with -
-    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-    .replace(/^-+/, '')             // Trim - from start of text
-    // .replace(/-+$/, '');            // Trim - from end of text
-  /* eslint-enable */
-};
+/* eslint-disable */
+export const slugify = (text) => text.toString().toLowerCase()
+  .replace(/&/g, '-and-')         // Replace & with 'and'
+  .replace(/\s+/g, '-')           // Replace spaces with -
+  .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+  .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+  .replace(/^-+/, '');            // Trim - from start of text
+  // .replace(/-+$/, '');            // Trim - from end of text
+/* eslint-enable */
 
 export const emailValidator = (email) => {
   /* eslint-disable */
@@ -104,15 +104,6 @@ export const newError = error => (params = {}) => {
   return {
     ...params, message, stack,
   };
-};
-
-
-export const deleteCookies = () => {
-  document.cookie.split(';').forEach((cookie) => {
-    const eqPos = cookie.indexOf('=');
-    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-    document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-  });
 };
 
 export const futurize = Future => fn => (...args) => new Future(
